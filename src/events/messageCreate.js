@@ -20,14 +20,19 @@ module.exports = async (client, message) => {
         const args = message.content.split(' ').slice(1);
         let cmd;
     
-        if (client.commandes.has(command)) { // command
-            cmd = client.commandes.get(command);
+        if (client.commands.has(command)) { // command
+            cmd = client.commands.get(command);
         } else if (client.aliases.has(command)) { // alias
-            cmd = client.commandes.get(client.aliases.get(command));
+            cmd = client.commands.get(client.aliases.get(command));
         }
         if (!cmd) return; // no command found
     
         const props = require(`../commands/${cmd.conf.dir}/${cmd.conf.name}`);
+
+        /* Check if the command is private */
+        if (props.conf.private && message.author.id !== client.config.owner) {
+            return message.react(client.emotes.x);
+        }
     
         /* Cooldown management */
         const now = Date.now();

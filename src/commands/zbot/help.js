@@ -17,7 +17,7 @@ module.exports = {
         if(!args[0]) {
             /* Get all commands categories */
             let categorie = [];
-            await client.commandes.forEach(async (cmd) => {
+            await client.commands.forEach(async (cmd) => {
                 if (!categorie.includes(cmd.conf.dir)) {
                     categorie.push(cmd.conf.dir);
                 }
@@ -38,8 +38,8 @@ module.exports = {
                 fields: categorie.sort().map(c => {
                     /* Display commands in each category */
                     let commands = message.author.id === client.config.owner
-                        ? client.commandes.filter((command) => command.conf.dir === c)
-                        : client.commandes.filter((command) => command.conf.dir === c
+                        ? client.commands.filter((command) => command.conf.dir === c)
+                        : client.commands.filter((command) => command.conf.dir === c
                                                                && command.conf.private !== true);
                     return {
                         name: `${categories[c]} (${commands.size})`,
@@ -52,10 +52,10 @@ module.exports = {
         /* Command name provided, look for the command help details */
         } else {
             let command = args[0];
-            if (client.commandes.has(command)) {
-                command = client.commandes.get(command);
+            if (client.commands.has(command)) {
+                command = client.commands.get(command);
             } else if(client.aliases.has(command)){
-                command = client.commandes.get(client.aliases.get(command));
+                command = client.commands.get(client.aliases.get(command));
             }
             if(!command.conf) {
                 return message.reply(`${client.emotes.x} I didn't find this command`

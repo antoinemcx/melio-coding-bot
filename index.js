@@ -14,7 +14,7 @@ const bot = (global.bot = new Client({
 const fs = require('fs');
 
 /* SET COLLECTION */
-bot.commandes = new Collection();
+bot.commands = new Collection();
 bot.aliases = new Collection();
 cooldowns = new Collection();
 
@@ -36,7 +36,7 @@ fs.readdir(commandsPath, (err, files) => {
             if (err) console.log(err);
             file.forEach(f => {
                 const props = require(`${commandsPath}${dir}/${f}`);
-                bot.commandes.set(props.conf.name, props);
+                bot.commands.set(props.conf.name, props);
                 props.conf.aliases.forEach(alias => {
                     bot.aliases.set(alias, props.conf.name);
                 });
