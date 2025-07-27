@@ -1,6 +1,6 @@
 const { Collection } = require("discord.js");
 const { findUserById } = require("../database/functions");
-const { getRoleForLevel } = require("../utils/leveling");
+const { getRoleForLevel, getNextLevelXP, getRolesLevels } = require("../utils/leveling");
 
 module.exports = async (client, message) => {
     if (message.author.bot) {
@@ -61,61 +61,58 @@ module.exports = async (client, message) => {
             return;
         }
 
-        const levelingRoles = client.config.levelingRoles
-        const xpToAdd = Math.floor(Math.random() * 7) + 8;
-        const userData = await findUserById(client, message.author.id);
-
-        if (userData === undefined) { // insert user if not found
-            client.db.query(`INSERT INTO leveling VALUES ('${message.author.id}', '0', '0');`)
-            return;
-        };
-
-        const currentXP = parseInt(userData.xp);
-        const currentLevel = parseInt(userData.level);
-        const newLevel = currentLevel + 1;
-        /* Get the next level's XP requirement */
-        const nextLevel = Math.floor(newLevel * (
-            225 + (newLevel > 1 ? 2 * (2 ** (newLevel / 2)) : 0)
-        ));
-
-        if (nextLevel <= (currentXP + xpToAdd)) { // level up
-            await client.db.query(`UPDATE leveling
-                                   SET xp=${currentXP + xpToAdd},level=${currentLevel + 1}
-                                   WHERE userID=${message.author.id};`);
-            
-            let levels = [];
-            for (let key in levelingRoles) {
-                levels.push(parseInt(key));
-            }
-
-            if (levels.includes(newLevel)) { // there is a role for this level
-                const currentRole = getRoleForLevel(currentLevel, levelingRoles);
-
-                if (currentRole) { // remove the previous role if exists
-                    message.member.roles.remove(currentRole[1]);
-                }
-                await message.member.roles.add(levelingRoles[newLevel][1]);
-                await message.channel.send(
-                    `**Congratulations** <@${message.author.id}>, you are now level ${newLevel} !`
-                    + ` Thus, you unlock the \`${levelingRoles[newLevel][0]}\` role.`
-                ).then(msg => {
-                    setTimeout(() => {
-                        msg.delete();
-                    }, 5000);
-                });
-            } else { // no role for this level
-                await message.channel.send(
-                    `**Congratulations** <@${message.author.id}>, you are now level ${newLevel} ! Keep it up.`
-                ).then(msg1 => {
-                    setTimeout(() => {
-                        msg1.delete();
-                    }, 5000);
-                });
-            }
-        } else {
-            await client.db.query(`UPDATE leveling
-                                   SET xp=${currentXP + xpToAdd}
-                                   WHERE userID=${message.author.id};`);
-        }
+        await updateUserLevelAndRole(client, message);
     }
 };
+
+async function updateUserLevelAndRole(client, message) {
+    const levelingRoles = client.config.levelingRoles;
+    const xpToAdd = Math.floor(Math.random() * 7) + 8;
+    const userData = await findUserById(client, message.author.id);
+
+    if (userData === undefined) { // insert user if not found
+        client.db.query(`INSERT INTO leveling VALUES ('${message.author.id}', '0', '0');`)
+        return;
+    };
+
+    const currentXP = parseInt(userData.xp);
+    const currentLevel = parseInt(userData.level);
+    const newLevel = currentLevel + 1;
+    /* Get the next level's XP requirement */
+    const nextLevel = getNextLevelXP(currentLevel);
+
+    if (nextLevel <= (currentXP + xpToAdd)) { // level up
+        await client.db.query(`UPDATE leveling
+                               SET xp=${currentXP + xpToAdd},level=${currentLevel + 1}
+                               WHERE userID=${message.author.id};`);
+        
+        if (getRolesLevels(levelingRoles).includes(newLevel)) { // there is a role for this level
+            const currentRole = getRoleForLevel(currentLevel, levelingRoles);
+
+            if (currentRole) { // remove the previous role if exists
+                message.member.roles.remove(currentRole[1]);
+            }
+            await message.member.roles.add(levelingRoles[newLevel][1]);
+            await message.channel.send(
+                `**Congratulations** <@${message.author.id}>, you are now level ${newLevel} !`
+                + ` Thus, you unlock the \`${levelingRoles[newLevel][0]}\` role.`
+            ).then(msg => {
+                setTimeout(() => {
+                    msg.delete();
+                }, 5000);
+            });
+        } else { // no role for this level
+            await message.channel.send(
+                `**Congratulations** <@${message.author.id}>, you are now level ${newLevel} ! Keep it up.`
+            ).then(msg1 => {
+                setTimeout(() => {
+                    msg1.delete();
+                }, 5000);
+            });
+        }
+    } else {
+        await client.db.query(`UPDATE leveling
+                               SET xp=${currentXP + xpToAdd}
+                               WHERE userID=${message.author.id};`);
+    }
+}

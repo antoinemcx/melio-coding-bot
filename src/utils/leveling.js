@@ -29,6 +29,19 @@ function getLevel(xp) {
 }
 
 /**
+ * Calculates the XP required to reach the next level,
+ * based on the current level.
+ * @param {number} currentLevel - The current level of the user
+ * @returns {number} The XP required to reach the next level
+ */
+function getNextLevelXP(currentLevel) {
+    const newLevel = currentLevel + 1;
+    return Math.floor(newLevel * (
+        225 + (newLevel > 1 ? 2 * (2 ** (newLevel / 2)) : 0)
+    ));
+}
+
+/**
  * Determines the role associated with a specific level based on
  * the leveling roles configuration.
  * @param {number} level - The level to check
@@ -37,11 +50,8 @@ function getLevel(xp) {
  * level has a role, otherwise null
  */
 function getRoleForLevel(level, levelingRoles) {
-    let levels = [];
+    const levels = getRolesLevels(levelingRoles);
     let result = null;
-    for (let key in levelingRoles) {
-        levels.push(parseInt(key));
-    }
 
     if(level === levels[0]) {
         result = 1;
@@ -55,4 +65,17 @@ function getRoleForLevel(level, levelingRoles) {
     return result === null ? null : levelingRoles[result];
 }
 
-module.exports = { getMaxXP, getLevel, getRoleForLevel };
+/**
+ * Retrieves the levels from the leveling roles configuration.
+ * @param {Object} levelingRoles - An object mapping levels to roles
+ * @returns {Array} An array of levels present in the leveling roles
+ */
+function getRolesLevels(levelingRoles) {
+    let levels = [];
+    for (let key in levelingRoles) {
+        levels.push(parseInt(key));
+    }
+    return levels;
+}
+
+module.exports = { getMaxXP, getLevel, getNextLevelXP, getRoleForLevel, getRolesLevels };
