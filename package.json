@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "^1.11.0",
+    "canvas": "^3.1.2",
     "child_process": "^1.0.2",
     "cpu-stat": "^2.0.1",
     "discord.js": "^14.21.0",

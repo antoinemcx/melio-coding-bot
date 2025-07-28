@@ -11,4 +11,18 @@ async function findUserById(bot, id) {
     });
 }
 
-module.exports = { findUserById }
+/**
+ * Retrieves the rank of a user based on their XP.
+ * @param {Object} client - The bot client
+ * @param {number} userId - The ID of the user to get the rank for
+ * @returns {Promise<Object>} A promise that resolves to the user's rank data
+ */
+async function getRankByUserId(client, userId) {
+    return await client.db.query(
+        `SELECT count(*) AS position FROM leveling WHERE xp+0 > (
+            SELECT xp FROM leveling WHERE userID = ${userId}
+        );`
+    );
+}
+
+module.exports = { findUserById, getRankByUserId }

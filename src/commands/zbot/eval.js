@@ -20,7 +20,7 @@ module.exports = {
                 new RegExp(`${client.token}`, "g"),
                 "nop?"
             );
-            if(returnCode.length > 1900) { // truncate output if too long
+            if (returnCode.length > 1900) { // truncate output if too long
                 returnCode = returnCode.substr(0, 1900);
                 returnCode = returnCode + "...";
             }

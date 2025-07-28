@@ -1,3 +1,4 @@
+const { getRankByUserId } = require("../../database/functions");
 const { getRoleForLevel } = require("../../utils/leveling");
 
 module.exports = {
@@ -9,12 +10,7 @@ module.exports = {
         dir: "general"
     },
     run: async (client, message, args) => {
-        const userRanking = await client.db.query(
-            `SELECT count(*) AS position FROM leveling WHERE xp+0 > (
-                SELECT xp
-                FROM leveling
-                WHERE userID = ${message.author.id}
-             );`);
+        const userRanking = await getRankByUserId(client, message.author.id);
         const top_25 = await client.db.query(
             `SELECT * FROM leveling ORDER BY xp+0 DESC LIMIT 25`);
 

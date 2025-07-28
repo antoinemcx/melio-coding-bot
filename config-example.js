@@ -21,6 +21,7 @@ module.exports = {
     roles: { // Roles IDs
         member: "",
         bot: "",
+        partner: ""
     },
   
     e: { // Emojis IDs

@@ -11,7 +11,7 @@ module.exports = {
         private: true
     },
     run: async (client, message, args) => {
-        if(!args[0]) {
+        if (!args[0]) {
             return message.reply(`${client.emotes.x} Wrong usage`
                                  + `\n> Usage : \`${module.exports.conf.usage}\``);
         }

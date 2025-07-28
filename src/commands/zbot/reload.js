@@ -8,13 +8,13 @@ module.exports = {
         private: true
     },
     run: (client, message, args) => {
-        if(!args[0]) {
+        if (!args[0]) {
             return message.reply(`${client.emotes.x} Wrong usage\n`
                                  + `> Usage : \`${module.exports.conf.usage}\``);
         }
 
         const command = getCommand(client, args[0].toLowerCase());
-        if(!command) {
+        if (!command) {
             const cmdName = args[0].toUpperCase();
             return message.reply(`${client.emotes.x} I didn't find the \`${cmdName}\` command`);
         }
@@ -27,7 +27,7 @@ module.exports = {
 
         client.commands.delete(args[0]); // update commands collection
         client.commands.set(props.conf.name, props);
-        if(props.conf.aliases) {
+        if (props.conf.aliases) {
             props.conf.aliases.forEach(alias => {
                 client.aliases.set(alias, props.conf.name);
             });

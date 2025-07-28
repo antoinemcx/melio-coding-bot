@@ -1,6 +1,6 @@
 const { Collection } = require("discord.js");
 const { findUserById } = require("../database/functions");
-const { getRoleForLevel, getNextLevelXP, getRolesLevels } = require("../utils/leveling");
+const { getRoleForLevel, getLevelXP, getRolesLevels } = require("../utils/leveling");
 
 module.exports = async (client, message) => {
     if (message.author.bot) {
@@ -84,7 +84,7 @@ async function updateUserLevelAndRole(client, message) {
     const currentLevel = parseInt(userData.level);
     const newLevel = currentLevel + 1;
     /* Get the next level's XP requirement */
-    const nextLevel = getNextLevelXP(currentLevel);
+    const nextLevel = getLevelXP(currentLevel + 1);
 
     if (nextLevel <= (currentXP + xpToAdd)) { // level up
         await client.db.query(`UPDATE leveling

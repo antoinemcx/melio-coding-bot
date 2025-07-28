@@ -16,7 +16,7 @@ function getLevel(xp) {
     let result;
     let i = 1;
 
-    if(xp < getMaxXP(1)) {
+    if (xp < getMaxXP(1)) {
         result = 1;
     } else {
         while(xp > getMaxXP(i)) {
@@ -29,16 +29,12 @@ function getLevel(xp) {
 }
 
 /**
- * Calculates the XP required to reach the next level,
- * based on the current level.
- * @param {number} currentLevel - The current level of the user
- * @returns {number} The XP required to reach the next level
+ * Calculates the XP required to reach the given level.
+ * @param {number} level - The level to calculate the XP for
+ * @returns {number} The XP required to reach the level
  */
-function getNextLevelXP(currentLevel) {
-    const newLevel = currentLevel + 1;
-    return Math.floor(newLevel * (
-        225 + (newLevel > 1 ? 2 * (2 ** (newLevel / 2)) : 0)
-    ));
+function getLevelXP(level) {
+    return Math.floor(level * (255 + (level > 1 ? 2 * (2 ** (level / 2)) : 0)));
 }
 
 /**
@@ -53,9 +49,9 @@ function getRoleForLevel(level, levelingRoles) {
     const levels = getRolesLevels(levelingRoles);
     let result = null;
 
-    if(level === levels[0]) {
+    if (level === levels[0]) {
         result = 1;
-    } else if(level > levels[0]) {
+    } else if (level > levels[0]) {
         let i = 0;
         while(level >= levels[i]) {
             i++;
@@ -78,4 +74,4 @@ function getRolesLevels(levelingRoles) {
     return levels;
 }
 
-module.exports = { getMaxXP, getLevel, getNextLevelXP, getRoleForLevel, getRolesLevels };
+module.exports = { getMaxXP, getLevel, getLevelXP, getRoleForLevel, getRolesLevels };

@@ -14,7 +14,7 @@ module.exports = {
             mod: `\\🔨 Moderation`,
         };
 
-        if(!args[0]) {
+        if (!args[0]) {
             /* Get all commands categories */
             let categorie = [];
             await client.commands.forEach(async (cmd) => {
@@ -54,10 +54,10 @@ module.exports = {
             let command = args[0];
             if (client.commands.has(command)) {
                 command = client.commands.get(command);
-            } else if(client.aliases.has(command)){
+            } else if (client.aliases.has(command)){
                 command = client.commands.get(client.aliases.get(command));
             }
-            if(!command.conf) {
+            if (!command.conf) {
                 return message.reply(`${client.emotes.x} I didn't find this command`
                                      + `\n> Usage : \`${module.exports.conf.usage}\``);
             }
@@ -112,7 +112,7 @@ module.exports = {
 
 function getCommandAliases(command, prefix) {
     let aliasesToSend = [];
-    if(command.conf.aliases.length === 0) { // look for aliases
+    if (command.conf.aliases.length === 0) { // look for aliases
         aliasesToSend.push('No aliases');
     } else {
         for(let i = 0; i < command.conf.aliases.length; i++){

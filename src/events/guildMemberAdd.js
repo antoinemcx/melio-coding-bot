@@ -1,7 +1,7 @@
 module.exports = async (client, member) => {    
-    if(bot.config.production && member.user.bot === true) {
+    if (bot.config.production && member.user.bot === true) {
         member.roles.add(client.config.roles.bot);
-    } else if(bot.config.production) {
+    } else if (bot.config.production) {
         await member.roles.add(client.config.roles.member);
 
         /* Welcome message */
