@@ -13,13 +13,13 @@ module.exports = {
   
     channels: { // Channels IDs
         welcome: "",
-        captcha: "",
         modlogs: "",
         levelingExcluded: [],
     },
 
     roles: { // Roles IDs
         member: "",
+        muted: "",
         bot: "",
         partner: ""
     },

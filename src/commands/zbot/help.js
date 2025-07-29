@@ -11,7 +11,7 @@ module.exports = {
             dev: `\\💻 Development`,
             general: `\\🧰 General`,
             zbot: `\\🤖 ${client.user.username}`,
-            mod: `\\🔨 Moderation`,
+            moderation: `\\🔨 Moderation`,
         };
 
         if (!args[0]) {
