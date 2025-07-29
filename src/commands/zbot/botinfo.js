@@ -18,7 +18,7 @@ module.exports = {
         const msg = await message.reply(`Searching...`);
 
         const clientDeveloper = client.users.cache.get(client.config.owner);
-        const ramUsage = formatBytes(process.memoryUsage().rss());
+        const ramUsage = formatBytes(process.memoryUsage().rss);
         const cores = os.cpus().length;
         const diskCapacity = 49; // assumed
         const clientCreationDate = utc(client.user.createdTimestamp).format('L');
