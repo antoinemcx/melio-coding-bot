@@ -25,21 +25,31 @@ module.exports = {
         const clientRamUsage = formatBytes(process.memoryUsage().heapUsed);
 
         try {
-            const cpuPercent = await getCpuUsage();
-            const diskStdout = await execAsyncCommand("du -hs ~/");
-            const memStdout = await execAsyncCommand("cat /proc/meminfo | head -n 3");
+            let diskStdout, memStdout;
+            try {
+                diskStdout = await execAsyncCommand("du -hs ~/");
+            } catch (e) {
+                diskStdout = null; // if not on a Unix system
+            }
+            try {
+                memStdout = await execAsyncCommand("cat /proc/meminfo | head -n 3");
+            } catch (e) {
+                memStdout = null; // if not on a Unix system
+            }
 
-            const diskUsage = diskStdout.split(`G`)[0];
-            const memory = memStdout.split("\n");
-            const totalMemory 
-            = (memory[0].split(':')[1].replace(/ /g, '').replace("kB", '')
-               * 0.000001).toFixed(2);
-            const usedMemory = totalMemory
-                               - (memory[2].split(':')[1].replace(/ /g, '')
-                                                         .replace("kB", '')
-                                  * 0.000001);
-            const clientRamPercentageUsage = (((ramUsage.split(' ')[0] * 0.001)
-                                               / totalMemory) * 100).toFixed(2);
+            const cpuPercent = await getCpuUsage();
+            const diskUsage = diskStdout ? diskStdout.split(`G`)[0] : null;
+            const memory = memStdout ? memStdout.split("\n") : [];
+            const totalMemory = memory.length > 0
+                ? (memory[0].split(':')[1].replace(/ /g, '').replace("kB", '') * 0.000001)
+                : null;
+            const usedMemory = totalMemory && memory.length > 2
+                ? totalMemory - (memory[2].split(':')[1].replace(/ /g, '')
+                                          .replace("kB", '') * 0.000001)
+                : null;
+            const clientRamPercentageUsage = totalMemory
+                ? (((ramUsage.split(' ')[0] * 0.001) / totalMemory) * 100).toFixed(2)
+                : null;
 
             await msg.edit({content: '** **', embeds: [{
                 color: client.color.messagecolor.embed,
@@ -58,18 +68,23 @@ module.exports = {
                            + `Created at : \`${clientCreationDate}\`\n`
                            + `CPU Usage : \`${cpuPercent.toFixed(2)}%\`\n`
                            + `Ram Usage : \`${ramUsage} `
-                           + `(Bot: ${clientRamUsage})\` | \`${clientRamPercentageUsage}%\``
+                           + `(Bot: ${clientRamUsage})\` | `
+                           + `\`${clientRamPercentageUsage || '?'}%\``
                 },
                 {
                     name: `\\🖥️ VPS`,
                     value: `Platform : \`${process.platform}\` `
                            + `| Arch : \`${os.arch()}\` | Cores : \`${cores}\`\n`
                            + `Config : \`${os.cpus().map(i => `${i.model}`)[0]}\`\n`
-                           + `Disk Usage : \`${diskUsage}/${diskCapacity} GB\` | `
-                           + `\`${((diskUsage / diskCapacity) * 100).toFixed(1)}%\`\n`
-                           + `Ram Usage : \`${(usedMemory).toFixed(2)}/${totalMemory} GB\` `
-                           + `| \`${((usedMemory / totalMemory) * 100).toFixed(1)}%\`\n\n`
-                           + `Uptime : \`${parseDuration(client.uptime)}\``
+                           + `Disk Usage : \`${diskUsage || '?'}/${diskCapacity} GB\` | `
+                           + `\`${diskUsage
+                               ? ((diskUsage / diskCapacity) * 100).toFixed(1) : '?'}%\`\n`
+                           + "Ram Usage : `" + (usedMemory && totalMemory
+                               ? `${usedMemory.toFixed(2)}/${totalMemory.toFixed(2)} GB\``
+                               : "? GB`")
+                           + ` | \`${usedMemory && totalMemory
+                               ? ((usedMemory / totalMemory) * 100).toFixed(1) : '?'}%\``
+                           + `\n\nUptime : \`${parseDuration(client.uptime)}\``
                 }],
                 timestamp: new Date(),
                 footer: {
