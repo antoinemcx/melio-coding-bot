@@ -1,14 +1,14 @@
 module.exports = {
-    token: '',
-    prefix: 'm!',
-    owner: "", //Owner ID
+    token: "",
+    prefix: "m!",
+    owner: "", // Bot owner's discord ID
     production: false,
 
     db: {
-        host: 'localhost',
-        user: '',
+        host: "localhost",
+        user: "",
         password: "",
-        database: '',
+        database: ""
     },
   
     channels: { // Channels IDs
@@ -16,7 +16,6 @@ module.exports = {
         modlogs: "",
         levelingExcluded: [],
     },
-
     roles: { // Roles IDs
         member: "",
         muted: "",
@@ -30,8 +29,13 @@ module.exports = {
         online: "",
     },
 
-    levelingRoles: { // level: ['RoleName', 'RoleID']
-        1: ['XXX', '012'],
-        5: ['XXX', '012'],
+    levelingRoles: { // level: ["RoleName", "RoleID"]
+        1: ["XXX", "012"],
+        5: ["XXX", "012"]
+    },
+    ticketSystem: {
+        emoji: "🎟️", // emoji used to open a ticket
+        createTicketMessage: "", // ID of the message to react on
+        parentCategory: "" // ID of the category to create tickets in
     }
 };
