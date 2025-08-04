@@ -1,16 +1,19 @@
 const { ChannelType, PermissionsBitField } = require("discord.js");
 
 module.exports = async (client, reaction, user) => {
-    if (!user.bot && reaction.emoji.name === client.config.ticketSystem.emoji) {
-        if (getUserTicketChannel(reaction, user) !== undefined) {
-            reaction.users.remove(user);
-            
-            user.send(`${client.emotes.x} You already have a ticket, `
-                      + "you can't open another one.");
-        } else {
-            await reaction.users.remove(user);
-            await createTicketChannel(client, reaction, user);
-        }
+    const isTicketCreation
+    = !user.bot
+      && reaction.message.id === client.config.ticketSystem.createTicketMessage
+      && reaction.emoji.name === client.config.ticketSystem.emoji;
+
+    if (isTicketCreation && getUserTicketChannel(reaction, user) !== undefined) {
+        reaction.users.remove(user);
+        
+        user.send(`${client.emotes.x} You already have a ticket, `
+                  + "you can't open another one.");
+    } else if (isTicketCreation) {
+        await reaction.users.remove(user);
+        await createTicketChannel(client, reaction, user);
     }
 }
 
