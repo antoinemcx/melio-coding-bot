@@ -38,8 +38,8 @@
 
 
 1. Clone the **config-example.js** configuration file, rename it to **config.js** and fill it with a bot and server data.
-2. Install dependencies with `npm install`
-3. Start the bot with `npm run start`
+2. Install dependencies with `yarn install` or `npm install`
+3. Start the bot with `yarn start` or `npm run start`
 
 <br>
 
