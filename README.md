@@ -37,9 +37,10 @@
 ## Starting the project
 
 
-1. Clone the **config-example.js** configuration file, rename it to **config.js** and fill it with a bot and server data.
-2. Install dependencies with `yarn install` or `npm install`
-3. Start the bot with `yarn start` or `npm run start`
+1. Clone the **config-example.json** configuration file, rename it to **config.json**
+2. Remove the comments from **config.json** and fill it with the bot token and your configuration.
+3. Install dependencies with `yarn install` or `npm install`
+4. Start the bot with `yarn start` or `npm run start`
 
 <br>
 
