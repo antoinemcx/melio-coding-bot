@@ -2,7 +2,7 @@ module.exports = {
     token: "",
     prefix: "m!",
     owner: "", // Bot owner's discord ID
-    production: false,
+    production: false, // Enables join/leave messages and role assignment
 
     db: {
         host: "localhost",
