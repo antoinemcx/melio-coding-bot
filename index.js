@@ -23,8 +23,8 @@ bot.color = require('./src/utils/color.js');
 require('./src/utils/errorHandler.js')(bot);
 
 /* SET CONFIG */
-bot.config = require('./config.js');
-bot.emotes = require('./config.js').e;
+bot.config = require('./config.json');
+bot.emotes = require('./config.json').e;
 bot.db = require('./src/database/db.js');
 
 /* LOAD ALL FILE AND COMMANDS */
