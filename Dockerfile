@@ -9,7 +9,9 @@ RUN apk update && apk add --no-cache \
     pango-dev \
     giflib-dev \
     jpeg-dev \
-    pixman-dev
+    pixman-dev \
+    fontconfig \
+    font-dejavu
 
 RUN mkdir -p /app
 WORKDIR /app
