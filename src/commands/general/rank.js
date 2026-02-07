@@ -1,4 +1,4 @@
-const { createCanvas, loadImage, registerFont } = require("canvas");
+const { createCanvas, loadImage } = require("canvas");
 const { AttachmentBuilder, PermissionsBitField } = require("discord.js");
 const { findUserById, getRankByUserId } = require("../../database/functions");
 const { getLevelXP } = require("../../utils/leveling");
@@ -30,8 +30,8 @@ module.exports = {
 
         /* Fetch user data */
         const userData = await findUserById(client, member.id);
-        const currentXP = parseInt(userData ? userData.xp : 0);
-        const currentLevel = parseInt(userData ? userData.level : 0);
+        const currentXP = Number.parseInt(userData ? userData.xp : 0);
+        const currentLevel = Number.parseInt(userData ? userData.level : 0);
         const thisLvlXP = getLevelXP(currentLevel);
         const nextLvlXP = getLevelXP(currentLevel + 1);
         const userLeaderboard = await getRankByUserId(client, member.id);
@@ -72,7 +72,7 @@ module.exports = {
         ctx.fillStyle = "white";
         ctx.fillText("Level", (810 + (currentLevel < 10 ? 28 : 0)), 152, 200);
         ctx.fillStyle = "#C4C4C4";
-        ctx.fillText(currentLevel, (880 + (currentLevel < 10 ? 17 : 0)), 152, 80);
+        ctx.fillText(currentLevel, (880 + (currentLevel < 10 ? 30 : 10)), 152, 80);
 
         /* Display the user rank and badges */
         ctx.font = "bold 32px Sans";
@@ -84,7 +84,7 @@ module.exports = {
         }
         ctx.fillText(`#${currentXP === 0
                          ? '-' : (Number(userLeaderboard[0].position) + 1)}`,
-                     ((badgeURL !== null ? 910 : 960)
+                     ((badgeURL === null ? 960 : 910)
                       - (currentLevel >= 10 ? 10 : 0)), 50, 200);
 
         /* Display the user name */
