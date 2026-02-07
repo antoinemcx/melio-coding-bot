@@ -25,6 +25,7 @@
 </p>
 
 ## Features
+* 🐋 Docker configuration for easy deployment
 * 📂 Classic commands and events handlers
 * 👨‍💻 Commands useful for developers (npm, github, website status)
 * 🚀 Leveling system (leaderboard, level roles)
@@ -36,11 +37,25 @@
 
 ## Starting the project
 
+### Locally with Node.js
+1. You must have [Node.js v20 or higher](https://nodejs.org/) installed on your machine and a MariaDB or MySQL database running
+2. Clone the **.env.example** file, rename it to **.env**
+3. Fill the **.env** file with your bot and database environment variables
+4. Clone the **config-example.js** configuration file, rename it to **config.js**
+5. Fill the **config.js** file with your preferred server configuration (do not touch process.env variables)
+6. Install dependencies with `yarn install` or `npm install`
+7. Start the bot with `yarn start` or `npm run start`
 
-1. Clone the **config-example.json** configuration file, rename it to **config.json**
-2. Remove the comments from **config.json** and fill it with the bot token and your configuration.
-3. Install dependencies with `yarn install` or `npm install`
-4. Start the bot with `yarn start` or `npm run start`
+### With Docker (recommended for production)
+1. You must have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed
+2. Clone the **.env.example** file, rename it to **.env**
+3. Fill the **.env** file with your bot token and the configuration you want for the database.
+**Warning**: the "DB_HOST" variable must be "db" to work with the docker-compose configuration.
+4. Clone the **config-example.js** configuration file, rename it to **config.js**
+5. Fill the **config.js** file with your preferred server configuration (do not touch process.env variables)
+6. Start the bot and the database with `docker compose up -d`  
+  
+To stop the bot and the database, run `docker compose down`.
 
 <br>
 
