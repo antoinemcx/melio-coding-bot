@@ -1,14 +1,14 @@
-{
-    "token": "",
+module.exports = {
+    "token": process.env.BOT_TOKEN, // Do not touch, the value is in .env
     "prefix": "m!",
     "owner": "", // Bot owner's discord ID
     "production": false, // Enables join/leave messages and role assignment
 
-    "db": {
-        "host": "localhost",
-        "user": "",
-        "password": "",
-        "database": ""
+    "db": { // Do not touch, the values are in .env
+        "host": process.env.DB_HOST,
+        "user": process.env.DB_USER,
+        "password": process.env.DB_PASSWORD,
+        "database": process.env.DB_NAME
     },
   
     "channels": { // Channels IDs
@@ -38,4 +38,4 @@
         "createTicketMessage": "", // ID of the message to react on
         "parentCategory": "" // ID of the category to create tickets in
     }
-}
+};
